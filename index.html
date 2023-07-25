@@ -5,10 +5,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css"/>
 
     <script src="index.js"></script>
-    <link rel="stylesheet" href="index.css"/>
 </head>
 
 <body>
@@ -21,44 +21,34 @@
             Your To-Do List
         </div>
     </header>
-    <div id="list-container">
+    <div id="controls-container">
         <div id="add-task">
-            <div class="control-button">
-                
-                <i class="fa-solid fa-plus"></i>
+            <div class="control-button complete">
+                <i class="fa-solid fa-plus" onclick="newTask(event)"></i>
             </div>
             <div class="task-name">
-                <input type="text" placeholder="Add your next task..."/>
+                <input onkeyup="newTask(event)" id="new-task" type="text" placeholder="Add your next task..."/>
             </div>
         </div>
-        <div id="controls">
+        <div id="controls" class="hide-elm">
             <div class="control-button">
-                <input type="checkbox" id="mark-all" title="Mark all as complete"/>
+                <input type="checkbox" id="mark-all" onclick="toggleCompleteAll()"/>
             </div>
             <div id="filters">
-                <button type="button">All</button>
-                <button type="button">Pending</button>
-                <button type="button">Completed</button>
-                <button type="button">Pinned</button>
+                <button type="button" onclick="filter(this)" class="button-active">All</button>
+                <button type="button" onclick="filter(this)">Pinned</button>
+                <button type="button" onclick="filter(this)">Pending</button>
+                <button type="button" onclick="filter(this)">Completed</button>
             </div>
-            <div class="control-button">
-                <i class="fa-solid fa-trash-can"></i>
-            </div>
-        </div>
-        <div class="task">
-            <div class="control-button">
-                <input type="checkbox" title="Mark as complete"/>
-            </div>
-            <div class="task-name">
-                <input type="text" value="Task 1">
-            </div>
-            <div class="control-button">
-                <i class="fa-solid fa-thumbtack"></i>
-            </div>
-            <div class="control-button">
-                <i class="fa-solid fa-xmark"></i>
+            <div id="delete-all" class="control-button complete">
+                <i class="fa-solid fa-trash-can" onclick="deleteAllCompleted()"></i>
             </div>
         </div>
+    </div>
+    <div id="list-container">
+        <div id="pinned-tasks"></div>
+        <div id="pending-tasks"></div>
+        <div id="completed-tasks"></div>
     </div>
 </body>
 
