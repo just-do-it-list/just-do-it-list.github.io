@@ -26,12 +26,34 @@ header {
     margin: 0px calc(50vw - 300px);
 }
 
-#controls-container > div, #pinned-tasks > div, #pending-tasks > div, #completed-tasks > div {
+#controls-container > div, #pinned > div, #pending > div, #completed > div {
     width: 100%;
     height: 40px;
     padding: 10px 5px;
 
     box-shadow: 0 0 1px #828282;
+}
+
+#pinned > .task > .task-name > input {
+    font-weight: 800;
+}
+
+#pinned > .task > .control-button > .fa-thumbtack {
+    display: block !important;
+    color: #007AFF;
+}
+
+#completed > .task > .task-name > input {
+    text-decoration: line-through;
+    color: #646464;
+    pointer-events: none;
+    opacity: 40%;
+}
+
+#completed > .task > .control-button > .fa-thumbtack, .complete {
+    color: #646464;
+    pointer-events: none;
+    opacity: 40%;
 }
 
 .hide-elm {
@@ -91,25 +113,6 @@ input[type="text"]::placeholder {
 
 .task:hover i {
     display: block;
-}
-
-.complete {
-    color: #646464;
-    pointer-events: none;
-    opacity: 40%;
-}
-
-.strikethrough {
-    text-decoration: line-through;
-}
-
-.extra-bold {
-    font-weight: 800;
-}
-
-.icon-active {
-    display: block !important;
-    color: #007AFF;
 }
 
 input[type="checkbox"] {
