@@ -29,7 +29,7 @@
                 <input onkeyup="newTask(event)" id="new-task" type="text" placeholder="Add your next task..."/>
             </div>
         </div>
-        <div id="controls" class="hide-elm">
+        <div id="controls">
             <div class="control-button">
                 <input type="checkbox" id="mark-all" onclick="toggleCompleteAll()"/>
             </div>
@@ -39,7 +39,7 @@
                 <button type="button" onclick="filter(this)">Pending</button>
                 <button type="button" onclick="filter(this)">Completed</button>
             </div>
-            <div id="delete-all" class="control-button complete">
+            <div id="delete-all" class="control-button">
                 <i class="fa-solid fa-trash-can" onclick="deleteAllCompleted()"></i>
             </div>
         </div>

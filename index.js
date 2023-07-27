@@ -14,7 +14,7 @@ window.onload = () => {
                             <input onclick="toggleComplete(this)" type="checkbox" ${cat === 'completed' ? 'checked' : ''} title="Mark as complete"/>
                         </div>
                         <div class="task-name">
-                            <input type="text" value="${task}"/>
+                            <input type="text" value="${task}" onfocusin="highlight(this, true)" onfocusout="highlight(this, false)" onkeyup="handleEdit(event)"/>
                         </div>
                         <div class="control-button">
                             <i onclick="deleteTask(this)" class="fa-solid fa-xmark"></i>
@@ -25,10 +25,11 @@ window.onload = () => {
                     </div>`
                 );
             }
-            let controls = document.getElementById("controls");
-            controls.classList.remove("hide-elm");
         }
     }
+    let markAll = document.getElementById("mark-all");
+    markAll.checked = allTasksCompleted();
+    enableDisableControls();
 };
 
 function newTask(event) {
@@ -42,21 +43,19 @@ function newTask(event) {
         plusIcon.classList.remove("complete");
 
     if((event.key === undefined || event.key === 'Enter') && task !== '') {
-        let controls = document.getElementById("controls");
-        controls.classList.remove("hide-elm");
-
         let markAll = document.getElementById("mark-all");
+        markAll.classList.remove('complete');
         markAll.checked = false;
 
         let cont = document.getElementById("pending");
         let taskID = (new Date()).getTime();
         cont.insertAdjacentHTML('beforeend',`
-            <div class="task" data-taskid="${taskID}">
+            <div class="task appear" data-taskid="${taskID}">
                 <div class="control-button">
                     <input onclick="toggleComplete(this)" type="checkbox" title="Mark as complete"/>
                 </div>
                 <div class="task-name">
-                    <input type="text" value="${task}"/>
+                    <input type="text" value="${task}" onfocusin="highlight(this, true)" onfocusout="highlight(this, false)" onkeyup="handleEdit(event)"/>
                 </div>
                 <div class="control-button">
                     <i onclick="deleteTask(this)" class="fa-solid fa-xmark"></i>
@@ -73,7 +72,16 @@ function newTask(event) {
     }
 }
 
-function toggleComplete(elem, hoverToggle=true) {
+function highlight(elem, on) {
+    let cont = elem.parentElement.parentElement;
+    console.log(cont);
+    if(on)
+        cont.classList.add("highlight");
+    else
+        cont.classList.remove("highlight");
+}
+
+function toggleComplete(elem) {
     let task = elem.parentElement.parentElement;
     let clonedTask = task.cloneNode(true);
     let deleteAllButton = document.getElementById("delete-all");
@@ -91,12 +99,14 @@ function toggleComplete(elem, hoverToggle=true) {
     }
 
     cont.insertAdjacentElement('beforeend', clonedTask);
-    deleteTask(elem);
+    clonedTask.classList.remove('disappear');
+    clonedTask.classList.add('appear');
+    deleteTask(elem, true);
 
-    if(hoverToggle) {
+    setTimeout(() => {
         let markAll = document.getElementById("mark-all");
         markAll.checked = allTasksCompleted();
-    }
+    }, 250);
 }
 
 function toggleCompleteAll() {
@@ -116,8 +126,6 @@ function toggleCompleteAll() {
         completeButton.checked = !allComplete;
         toggleComplete(completeButton, false);
     }
-
-    checkDisableControls();
 }
 
 function allTasksCompleted() {
@@ -128,33 +136,49 @@ function allTasksCompleted() {
     return allCompleted;
 }
 
-function checkDisableControls() {
+function enableDisableControls() {
     let pinned = document.getElementById("pinned");
     let pending = document.getElementById("pending");
     let completed = document.getElementById("completed");
 
     if(pinned.childElementCount === 0 && pending.childElementCount === 0 && completed.childElementCount === 0) {
-        let controls = document.getElementById("controls");
-        controls.classList.add("hide-elm");
+        let markAllButton = document.getElementById("mark-all");
+        markAllButton.checked = false;
+        markAllButton.classList.add("complete");
     }
-    else if(completed.childElementCount === 0) {
+    if(completed.childElementCount === 0) {
         let deleteAllButton = document.getElementById("delete-all");
         deleteAllButton.classList.add("complete");
     }
 }
 
-function deleteTask(elem) {
+function deleteTask(elem, move=false) {
+    console.log(move);
     let taskObj = getTaskDetails(elem);
     modifyStorage('delete', taskObj);
-    elem.parentElement.parentElement.remove();
-    checkDisableControls();
+    if(move) {
+        elem.parentElement.parentElement.classList.remove("appear");
+        elem.parentElement.parentElement.classList.add("disappear");
+        setTimeout(() => {
+            elem.parentElement.parentElement.remove();
+            enableDisableControls();
+        }, 100);
+    }
+    else {
+        elem.parentElement.parentElement.classList.remove("appear");
+        elem.parentElement.parentElement.classList.remove("disappear");
+        elem.parentElement.parentElement.classList.add("delete");
+        setTimeout(() => {
+            elem.parentElement.parentElement.remove();
+            enableDisableControls();
+        }, 500);
+    }
 }
 
 function deleteAllCompleted() {
-    let completed = document.getElementById("completed");
-    completed.innerHTML = '';
-    localStorage.setItem('completed', '{}');
-    checkDisableControls();
+    let completed = document.getElementById("completed").children;
+    for(let task of completed)
+        deleteTask(task.children[2].children[0]);
 }
 
 function togglePin(elem) {
@@ -173,7 +197,9 @@ function togglePin(elem) {
     }
 
     cont.insertAdjacentElement('afterbegin', clonedTask);
-    deleteTask(elem);
+    clonedTask.classList.remove('disappear');
+    clonedTask.classList.add('appear');
+    deleteTask(elem, true);
 }
 
 function isPinned(elem) {
@@ -210,6 +236,18 @@ function filter(elem) {
         pinned.classList.remove("hide-elm");
         pending.classList.remove("hide-elm");
         completed.classList.remove("hide-elm");
+    }
+}
+
+function handleEdit(event) {
+    let elem = event.target;
+    let task = elem.value;
+
+    if(task === '')
+        deleteTask(elem);
+    else {
+        let taskObj = getTaskDetails(elem);
+        modifyStorage('edit', taskObj);
     }
 }
 
