@@ -33,7 +33,7 @@ window.onload = () => {
 };
 
 function newTask(event) {
-    let inputText = event.target;
+    let inputText = document.getElementById("new-task");
     let task = inputText.value;
     let plusIcon = inputText.parentElement.parentElement.children[0];
 
@@ -74,7 +74,6 @@ function newTask(event) {
 
 function highlight(elem, on) {
     let cont = elem.parentElement.parentElement;
-    console.log(cont);
     if(on)
         cont.classList.add("highlight");
     else
@@ -92,10 +91,12 @@ function toggleComplete(elem) {
         cont = document.getElementById("completed");
         deleteAllButton.classList.remove("complete");
         modifyStorage('markcomplete', taskObj);
+        clonedTask.onkeydown = () => false;
     }
     else {
         cont = document.getElementById("pending");
         modifyStorage('markincomplete', taskObj);
+        clonedTask.onkeydown = null;
     }
 
     cont.insertAdjacentElement('beforeend', clonedTask);
@@ -106,7 +107,11 @@ function toggleComplete(elem) {
     setTimeout(() => {
         let markAll = document.getElementById("mark-all");
         markAll.checked = allTasksCompleted();
-    }, 250);
+    }, 400);
+
+    setTimeout(() => {
+        clonedTask.classList.remove('appear');
+    }, 400);
 }
 
 function toggleCompleteAll() {
@@ -153,7 +158,6 @@ function enableDisableControls() {
 }
 
 function deleteTask(elem, move=false) {
-    console.log(move);
     let taskObj = getTaskDetails(elem);
     modifyStorage('delete', taskObj);
     if(move) {
@@ -162,7 +166,7 @@ function deleteTask(elem, move=false) {
         setTimeout(() => {
             elem.parentElement.parentElement.remove();
             enableDisableControls();
-        }, 100);
+        }, 400);
     }
     else {
         elem.parentElement.parentElement.classList.remove("appear");
@@ -171,7 +175,7 @@ function deleteTask(elem, move=false) {
         setTimeout(() => {
             elem.parentElement.parentElement.remove();
             enableDisableControls();
-        }, 500);
+        }, 600);
     }
 }
 
@@ -200,6 +204,10 @@ function togglePin(elem) {
     clonedTask.classList.remove('disappear');
     clonedTask.classList.add('appear');
     deleteTask(elem, true);
+
+    setTimeout(() => {
+        clonedTask.classList.remove('appear');
+    }, 400);
 }
 
 function isPinned(elem) {

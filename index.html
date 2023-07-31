@@ -4,8 +4,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css"/>
 
     <script src="index.js"></script>
@@ -20,34 +19,36 @@
             Your To-Do List
         </div>
     </header>
-    <div id="controls-container">
-        <div id="add-task">
-            <div class="control-button complete">
-                <i class="fa-solid fa-plus" onclick="newTask(event)"></i>
+    <div id="App">
+        <div id="controls-container">
+            <div id="add-task">
+                <div class="control-button complete">
+                    <i class="fa-solid fa-plus" onclick="newTask(event)"></i>
+                </div>
+                <div class="task-name">
+                    <input onkeyup="newTask(event)" id="new-task" type="text" placeholder="Add your next task..."/>
+                </div>
             </div>
-            <div class="task-name">
-                <input onkeyup="newTask(event)" id="new-task" type="text" placeholder="Add your next task..."/>
+            <div id="controls">
+                <div class="control-button">
+                    <input type="checkbox" id="mark-all" onclick="toggleCompleteAll()"/>
+                </div>
+                <div id="filters">
+                    <button type="button" onclick="filter(this)" class="button-active">All</button>
+                    <button type="button" onclick="filter(this)">Pinned</button>
+                    <button type="button" onclick="filter(this)">Pending</button>
+                    <button type="button" onclick="filter(this)">Completed</button>
+                </div>
+                <div id="delete-all" class="control-button">
+                    <i class="fa-solid fa-trash-can" onclick="deleteAllCompleted()"></i>
+                </div>
             </div>
         </div>
-        <div id="controls">
-            <div class="control-button">
-                <input type="checkbox" id="mark-all" onclick="toggleCompleteAll()"/>
-            </div>
-            <div id="filters">
-                <button type="button" onclick="filter(this)" class="button-active">All</button>
-                <button type="button" onclick="filter(this)">Pinned</button>
-                <button type="button" onclick="filter(this)">Pending</button>
-                <button type="button" onclick="filter(this)">Completed</button>
-            </div>
-            <div id="delete-all" class="control-button">
-                <i class="fa-solid fa-trash-can" onclick="deleteAllCompleted()"></i>
-            </div>
+        <div id="list-container">
+            <div id="pinned"></div>
+            <div id="pending"></div>
+            <div id="completed"></div>
         </div>
-    </div>
-    <div id="list-container">
-        <div id="pinned"></div>
-        <div id="pending"></div>
-        <div id="completed"></div>
     </div>
 </body>
 
