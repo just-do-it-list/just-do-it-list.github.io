@@ -1,26 +1,47 @@
 window.onload = () => {
-    let cats = ['pinned', 'pending', 'completed'];
+    const cats = ["pinned", "pending", "completed"];
     for(let cat of cats) {
         let tasks = localStorage.getItem(cat);
-        if(tasks !== null && tasks !== '{}') {
+        if(tasks !== null && tasks !== "{}") {
             let cont = document.getElementById(cat);
             tasks = JSON.parse(tasks);
-            let entries = cat === 'pinned' ? Object.entries(tasks).reverse() : Object.entries(tasks);
+            let entries = (
+                cat === "pinned" ?
+                Object.entries(tasks).reverse() :
+                Object.entries(tasks)
+            );
 
             for(let [taskID, task] of entries) {
-                cont.insertAdjacentHTML('beforeend',`
+                cont.insertAdjacentHTML("beforeend",`
                     <div class="task" data-taskid="${taskID}">
                         <div class="control-button">
-                            <input onclick="toggleComplete(this)" type="checkbox" ${cat === 'completed' ? 'checked' : ''} title="Mark as complete"/>
+                            <input
+                                onclick="toggleComplete(this)"
+                                type="checkbox"
+                                ${cat === "completed" ? "checked" : ""}
+                                title="Mark as complete"
+                            />
                         </div>
                         <div class="task-name">
-                            <input type="text" value="${task}" onfocusin="highlight(this, true)" onfocusout="highlight(this, false)" onkeyup="handleEdit(event)"/>
+                            <input
+                                type="text"
+                                value="${task}"
+                                onfocusin="highlight(this, true)"
+                                onfocusout="highlight(this, false)"
+                                onkeyup="handleEdit(event)"
+                            />
                         </div>
                         <div class="control-button">
-                            <i onclick="deleteTask(this)" class="fa-solid fa-xmark"></i>
+                            <i
+                                onclick="deleteTask(this)"
+                                class="fa-solid fa-xmark"
+                            ></i>
                         </div>
                         <div class="control-button">
-                            <i onclick="togglePin(this)" class="fa-solid fa-thumbtack"></i>
+                            <i
+                                onclick="togglePin(this)"
+                                class="fa-solid fa-thumbtack"
+                            ></i>
                         </div>
                     </div>`
                 );
@@ -37,47 +58,83 @@ function newTask(event) {
     let task = inputText.value;
     let plusIcon = inputText.parentElement.parentElement.children[0];
 
-    if(task === '')
-        plusIcon.classList.add("complete");
+    if(task === "")
+        addClass(plusIcon, "complete");
     else
-        plusIcon.classList.remove("complete");
+        removeClass(plusIcon, "complete");
 
-    if((event.key === undefined || event.key === 'Enter') && task !== '') {
+    if(
+        (event.key === undefined || event.key === "Enter") &&
+        task !== ""
+    ) {
         let markAll = document.getElementById("mark-all");
-        markAll.classList.remove('complete');
+        removeClass(markAll, "complete");
         markAll.checked = false;
 
         let cont = document.getElementById("pending");
         let taskID = (new Date()).getTime();
-        cont.insertAdjacentHTML('beforeend',`
-            <div class="task appear" data-taskid="${taskID}">
+        cont.insertAdjacentHTML("beforeend",`
+            <div class="task" data-taskid="${taskID}">
                 <div class="control-button">
-                    <input onclick="toggleComplete(this)" type="checkbox" title="Mark as complete"/>
+                    <input
+                        onclick="toggleComplete(this)"
+                        type="checkbox"
+                        title="Mark as complete"
+                    />
                 </div>
                 <div class="task-name">
-                    <input type="text" value="${task}" onfocusin="highlight(this, true)" onfocusout="highlight(this, false)" onkeyup="handleEdit(event)"/>
+                    <input
+                        type="text"
+                        value="${task}"
+                        onfocusin="highlight(this, true)"
+                        onfocusout="highlight(this, false)"
+                        onkeyup="handleEdit(event)"
+                    />
                 </div>
                 <div class="control-button">
-                    <i onclick="deleteTask(this)" class="fa-solid fa-xmark"></i>
+                    <i
+                        onclick="deleteTask(this)"
+                        class="fa-solid fa-xmark"
+                    ></i>
                 </div>
                 <div class="control-button">
-                    <i onclick="togglePin(this)" class="fa-solid fa-thumbtack"></i>
+                    <i
+                        onclick="togglePin(this)"
+                        class="fa-solid fa-thumbtack"
+                    ></i>
                 </div>
             </div>`
         );
-        modifyStorage('add', {taskID, task, taskType: 'pending'});
+        let taskElem = cont.lastChild;
+        addClass(taskElem, "appear");
+        setTimeout(() => {
+            removeClass(taskElem, "appear");
+        }, 400);
+        modifyStorage("add", {taskID, task, taskType: "pending"});
 
         inputText.value = "";
-        plusIcon.classList.add("complete");
+        addClass(plusIcon, "complete");
     }
+}
+
+function addClass(elem, className) {
+    elem.classList.add(className);
+}
+
+function removeClass(elem, className) {
+    elem.classList.remove(className);
+}
+
+function isEmpty(elem) {
+    return elem.childElementCount === 0;
 }
 
 function highlight(elem, on) {
     let cont = elem.parentElement.parentElement;
     if(on)
-        cont.classList.add("highlight");
+        addClass(cont, "highlight");
     else
-        cont.classList.remove("highlight");
+        removeClass(cont, "highlight");
 }
 
 function toggleComplete(elem) {
@@ -89,19 +146,19 @@ function toggleComplete(elem) {
 
     if(elem.checked) {
         cont = document.getElementById("completed");
-        deleteAllButton.classList.remove("complete");
-        modifyStorage('markcomplete', taskObj);
+        removeClass(deleteAllButton, "complete");
+        modifyStorage("markcomplete", taskObj);
         clonedTask.onkeydown = () => false;
     }
     else {
         cont = document.getElementById("pending");
-        modifyStorage('markincomplete', taskObj);
+        modifyStorage("markincomplete", taskObj);
         clonedTask.onkeydown = null;
     }
 
-    cont.insertAdjacentElement('beforeend', clonedTask);
-    clonedTask.classList.remove('disappear');
-    clonedTask.classList.add('appear');
+    cont.insertAdjacentElement("beforeend", clonedTask);
+    removeClass(clonedTask, "disappear");
+    addClass(clonedTask, "appear");
     deleteTask(elem, true);
 
     setTimeout(() => {
@@ -110,7 +167,7 @@ function toggleComplete(elem) {
     }, 400);
 
     setTimeout(() => {
-        clonedTask.classList.remove('appear');
+        removeClass(clonedTask, "appear");
     }, 400);
 }
 
@@ -134,9 +191,9 @@ function toggleCompleteAll() {
 }
 
 function allTasksCompleted() {
-    let pinnedTasks = document.getElementById("pinned").children;
-    let pendingTasks = document.getElementById("pending").children;
-    let allCompleted = (pinnedTasks.length === 0) && (pendingTasks.length === 0);
+    let pinnedTasks = document.getElementById("pinned");
+    let pendingTasks = document.getElementById("pending");
+    let allCompleted = isEmpty(pinnedTasks) && isEmpty(pendingTasks);
 
     return allCompleted;
 }
@@ -146,32 +203,32 @@ function enableDisableControls() {
     let pending = document.getElementById("pending");
     let completed = document.getElementById("completed");
 
-    if(pinned.childElementCount === 0 && pending.childElementCount === 0 && completed.childElementCount === 0) {
+    if(isEmpty(pinned) && isEmpty(pending) && isEmpty(completed)) {
         let markAllButton = document.getElementById("mark-all");
         markAllButton.checked = false;
-        markAllButton.classList.add("complete");
+        addClass(markAllButton, "complete");
     }
-    if(completed.childElementCount === 0) {
+    if(isEmpty(completed)) {
         let deleteAllButton = document.getElementById("delete-all");
-        deleteAllButton.classList.add("complete");
+        addClass(deleteAllButton, "complete");
     }
 }
 
 function deleteTask(elem, move=false) {
     let taskObj = getTaskDetails(elem);
-    modifyStorage('delete', taskObj);
+    modifyStorage("delete", taskObj);
     if(move) {
-        elem.parentElement.parentElement.classList.remove("appear");
-        elem.parentElement.parentElement.classList.add("disappear");
+        removeClass(elem.parentElement.parentElement, "appear");
+        addClass(elem.parentElement.parentElement, "disappear");
         setTimeout(() => {
             elem.parentElement.parentElement.remove();
             enableDisableControls();
         }, 400);
     }
     else {
-        elem.parentElement.parentElement.classList.remove("appear");
-        elem.parentElement.parentElement.classList.remove("disappear");
-        elem.parentElement.parentElement.classList.add("delete");
+        removeClass(elem.parentElement.parentElement, "appear");
+        removeClass(elem.parentElement.parentElement, "disappear");
+        addClass(elem.parentElement.parentElement, "delete");
         setTimeout(() => {
             elem.parentElement.parentElement.remove();
             enableDisableControls();
@@ -193,57 +250,57 @@ function togglePin(elem) {
 
     if(!isPinned(elem)) {
         cont = document.getElementById("pinned");
-        modifyStorage('pin', taskObj);
+        modifyStorage("pin", taskObj);
     }
     else {
         cont = document.getElementById("pending");
-        modifyStorage('unpin', taskObj);
+        modifyStorage("unpin", taskObj);
     }
 
-    cont.insertAdjacentElement('afterbegin', clonedTask);
-    clonedTask.classList.remove('disappear');
-    clonedTask.classList.add('appear');
+    cont.insertAdjacentElement("afterbegin", clonedTask);
+    removeClass(clonedTask, "disappear");
+    addClass(clonedTask, "appear");
     deleteTask(elem, true);
 
     setTimeout(() => {
-        clonedTask.classList.remove('appear');
+        removeClass(clonedTask, "appear");
     }, 400);
 }
 
 function isPinned(elem) {
     let container =  elem.parentElement.parentElement.parentElement;
-    return container.id === 'pinned';
+    return container.id === "pinned";
 }
 
 function filter(elem) {
     let buttons = document.getElementsByTagName("button");
     for(let button of buttons)
-        button.classList.remove("button-active");
-    elem.classList.add("button-active");
+        removeClass(button, "button-active");
+    addClass(elem, "button-active");
 
     let pinned = document.getElementById("pinned");
     let pending = document.getElementById("pending");
     let completed = document.getElementById("completed");
 
-    if(elem.innerText === 'Pinned') {
-        pinned.classList.remove("hide-elm");
-        pending.classList.add("hide-elm");
-        completed.classList.add("hide-elm");
+    if(elem.innerText === "Pinned") {
+        removeClass(pinned, "hide-elm");
+        addClass(pending, "hide-elm");
+        addClass(completed, "hide-elm");
     }
-    else if(elem.innerText === 'Pending') {
-        pinned.classList.add("hide-elm");
-        pending.classList.remove("hide-elm");
-        completed.classList.add("hide-elm");
+    else if(elem.innerText === "Pending") {
+        addClass(pinned, "hide-elm");
+        removeClass(pending, "hide-elm");
+        addClass(completed, "hide-elm");
     }
-    else if(elem.innerText === 'Completed') {
-        pinned.classList.add("hide-elm");
-        pending.classList.add("hide-elm");
-        completed.classList.remove("hide-elm");
+    else if(elem.innerText === "Completed") {
+        addClass(pinned, "hide-elm");
+        addClass(pending, "hide-elm");
+        removeClass(completed, "hide-elm");
     }
     else {
-        pinned.classList.remove("hide-elm");
-        pending.classList.remove("hide-elm");
-        completed.classList.remove("hide-elm");
+        removeClass(pinned, "hide-elm");
+        removeClass(pending, "hide-elm");
+        removeClass(completed, "hide-elm");
     }
 }
 
@@ -251,11 +308,11 @@ function handleEdit(event) {
     let elem = event.target;
     let task = elem.value;
 
-    if(task === '')
+    if(task === "")
         deleteTask(elem);
     else {
         let taskObj = getTaskDetails(elem);
-        modifyStorage('edit', taskObj);
+        modifyStorage("edit", taskObj);
     }
 }
 
@@ -267,41 +324,39 @@ function getTaskDetails(elem) {
     return {taskID, task, taskType};
 }
 
+function getItemFromLocalStorage(name) {
+    return JSON.parse(localStorage.getItem(name) || "{}");
+}
+
+function setItemInLocalStorage(name, value) {
+    return localStorage.setItem(name, JSON.stringify(value));
+}
+
 function modifyStorage(action, taskObj) {
     let {taskID, task, taskType} = taskObj;
-    if(action === 'add') {
-        let pending = JSON.parse(localStorage.getItem("pending") || '{}');
+    if(action === "add" || action === "unpin" || action === "markincomplete") {
+        let pending = getItemFromLocalStorage("pending");
         pending[taskID] = task;
-        localStorage.setItem("pending", JSON.stringify(pending));
+        setItemInLocalStorage("pending", pending);
     }
-    else if(action === 'delete') {
-        let tasks = JSON.parse(localStorage.getItem(taskType) || '{}');
+    else if(action === "delete") {
+        let tasks = getItemFromLocalStorage(taskType);
         delete tasks[taskID];
-        localStorage.setItem(taskType, JSON.stringify(tasks));
+        setItemInLocalStorage(taskType, tasks);
     }
-    else if(action === 'edit') {
-        let tasks = JSON.parse(localStorage.getItem(taskType) || '{}');
+    else if(action === "edit") {
+        let tasks = getItemFromLocalStorage(taskType);
         tasks[taskID] = task;
-        localStorage.setItem(taskType, JSON.stringify(tasks));
+        setItemInLocalStorage(taskType, tasks);
     }
-    else if(action === 'pin') {
-        let pinned = JSON.parse(localStorage.getItem("pinned") || '{}');
+    else if(action === "pin") {
+        let pinned = getItemFromLocalStorage("pinned");
         pinned[taskID] = task;
-        localStorage.setItem("pinned", JSON.stringify(pinned));
+        setItemInLocalStorage("pinned", pinned);
     }
-    else if(action === 'unpin') {
-        let pending = JSON.parse(localStorage.getItem("pending") || '{}');
-        pending[taskID] = task;
-        localStorage.setItem("pending", JSON.stringify(pending));
-    }
-    else if(action === 'markcomplete') {
-        let completed = JSON.parse(localStorage.getItem("completed") || '{}');
+    else if(action === "markcomplete") {
+        let completed = getItemFromLocalStorage("completed");
         completed[taskID] = task;
-        localStorage.setItem("completed", JSON.stringify(completed));
-    }
-    else if(action === 'markincomplete') {
-        let pending = JSON.parse(localStorage.getItem("pending") || '{}');
-        pending[taskID] = task;
-        localStorage.setItem("pending", JSON.stringify(pending));
+        setItemInLocalStorage("completed", completed);
     }
 }
