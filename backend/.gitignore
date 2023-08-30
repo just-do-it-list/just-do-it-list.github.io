@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /build
+_db.json
 
 # misc
 .DS_Store

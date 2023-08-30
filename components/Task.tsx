@@ -16,12 +16,12 @@ export type taskType = {
 const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => {
     const {setTimeCreated} = useDeleteTask(manageTaskList);
     const {taskValue, setTaskValue} = useEditTask({task, manageTaskList});
+    const {dispatchChangedStatus} = useChangeStatus({task, manageTaskList});
     const isPinned = task.status === "PINNED";
     const isComplete = task.status === "COMPLETED";
-    const {dispatchChangedStatus} = useChangeStatus({task, manageTaskList})
 
     return (
-        <div>
+        <>
             <Checkbox
                 rounded
                 checked={isComplete}
@@ -30,6 +30,7 @@ const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => 
             <Input
                 value={taskValue}
                 onEventDispatch={setTaskValue}
+                onDeleteDispatch={() => setTimeCreated(task.timeCreated)}
                 completed={isComplete}
                 pinned={isPinned}
             />
@@ -43,9 +44,10 @@ const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => 
                 buttonType="PIN"
                 active={isPinned}
                 disabled={isComplete}
+                hide={!isPinned}
                 onEventDispatch={() => dispatchChangedStatus(isPinned ? "PENDING" : "PINNED")}
             />
-        </div>
+        </>
     )
 }
 

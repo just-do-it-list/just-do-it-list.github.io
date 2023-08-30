@@ -1,4 +1,5 @@
 import { taskAction } from "@/hooks/useNewTask";
+import { useEffect } from "react";
 
 type inputProps = {
     value?: string;
@@ -6,9 +7,10 @@ type inputProps = {
     completed?: boolean;
     pinned?: boolean;
     onEventDispatch: (action: any) => void;
+    onDeleteDispatch: () => void;
 }
 
-const Input = ({value, placeholder, completed, pinned, onEventDispatch}: inputProps) => {
+const Input = ({value, placeholder, completed, pinned, onEventDispatch, onDeleteDispatch}: inputProps) => {
     return (
         <div className="flex-auto text-md md:text-xl pl-1">
             <input
@@ -20,7 +22,7 @@ const Input = ({value, placeholder, completed, pinned, onEventDispatch}: inputPr
                 value={value}
                 placeholder={placeholder}
                 onChange={e => onEventDispatch({type: 'CHANGE', payload: e.target.value})}
-                onKeyDown={e => e.key === "Enter" && onEventDispatch({type: 'ENTER'})}
+                onKeyDown={e => (e.key === "Enter" && onEventDispatch({type: 'ENTER'}) || (e.key === 'Backspace' && e.currentTarget.value.length === 1 && onDeleteDispatch()))}
             />
         </div>
     );

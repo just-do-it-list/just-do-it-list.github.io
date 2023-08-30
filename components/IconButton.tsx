@@ -6,6 +6,7 @@ type iconButtonProps = {
     Icon: IconType;
     disabled?: boolean;
     active?: boolean;
+    hide?: boolean;
     buttonType: buttonType;
     onEventDispatch: any;
 }
@@ -19,7 +20,7 @@ const buttonTypeDispatch = (type: buttonType, dispatch: any) => {
     }
 }
 
-const IconButton = ({Icon, disabled = false, active = false, buttonType, onEventDispatch}: iconButtonProps) => {
+const IconButton = ({Icon, disabled = false, active = false, hide = true, buttonType, onEventDispatch}: iconButtonProps) => {
     return (
         <div className="w-9 md:w-12">
             <button disabled={disabled}>
@@ -28,6 +29,7 @@ const IconButton = ({Icon, disabled = false, active = false, buttonType, onEvent
                         scale-[120%] md:scale-[150%]
                         ${disabled && 'opacity-40 pointer-events-none'}
                         ${active && 'text-[#007AFF]'}
+                        ${hide && 'icon-button'}
                     `}
                     onClick={() => buttonTypeDispatch(buttonType, onEventDispatch)}
                 />

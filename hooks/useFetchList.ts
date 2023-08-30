@@ -16,7 +16,6 @@ const useFetchList = (manageTaskList: any) => {
 
     useEffect(() => {
         if(data) {
-            console.log(data);
             manageTaskList({
                 type: "FETCH_ALL",
                 payload: {

@@ -20,7 +20,12 @@ const Controls = ({manageTaskList}: any) => {
                 onEventDispatch={() => setToggleAll(true)}
             />
             <ToggleGroup />
-            <IconButton Icon={FaTrashCan} buttonType="DELETE_COMPLETED" onEventDispatch={() => setDeleteCompleted(true)}/>
+            <IconButton
+                Icon={FaTrashCan}
+                buttonType="DELETE_COMPLETED"
+                hide={false}
+                onEventDispatch={() => setDeleteCompleted(true)}
+            />
         </div>
     );
 }

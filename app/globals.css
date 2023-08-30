@@ -19,11 +19,19 @@
     }
 
     .container > div {
-        @apply py-3 md:py-4 my-1 shadow-[0_0_1px_#828282];
+        @apply py-3 md:py-4 my-3 shadow-[0_0_1px_#828282];
+    }
+
+    .container > div .icon-button {
+        display: none;
+    }
+
+    .container > div:hover .icon-button {
+        display: block;
     }
 
     #controls {
-        @apply -mt-1 py-2 md:py-3;
+        @apply -mt-3 py-2 md:py-3;
     }
 
     input[type="checkbox"] {

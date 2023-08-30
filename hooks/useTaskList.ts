@@ -25,8 +25,6 @@ const sortTaskList = (taskList: taskType[]) => {
 }
 
 const reducer = (taskList: taskType[], action: manageListAction) => {
-    console.log(action);
-
     if(action.type === "FETCH_ALL") {
         let list:taskType[] = action.payload.data || [];
         return sortTaskList(list);

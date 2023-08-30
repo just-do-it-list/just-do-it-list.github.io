@@ -24,7 +24,7 @@ const reducer = (state: taskState, action: taskAction) => {
             return {...state, value: action.payload || ''};
         case 'ENTER':
         case 'CLICK':
-            return {...state, changeTask: true};
+            return state.value.length ? {...state, changeTask: true} : state;
         case 'RESET_VALUE':
             return {...state, value: initialState.value};
         case 'RESET_FLAG':

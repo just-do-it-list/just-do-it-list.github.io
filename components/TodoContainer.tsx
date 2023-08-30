@@ -29,7 +29,7 @@ const TodoContainer = () => {
         <ApolloProvider client={apolloClient}>
             <FilterContext.Provider value={{activeTab, setActiveTab}}>
                 <AllCompleteContext.Provider value={{allComplete, setAllComplete}}>
-                    <div className="mx-auto max-sm:w-11/12 sm:max-md:w-11/12 md:max-lg:w-10/12 lg:max-xl:w-[800px] xl:w-[900px] container text-[#646464]">
+                    <div className="mx-auto max-sm:w-11/12 sm:max-md:w-11/12 md:max-lg:w-10/12 lg:max-xl:w-[800px] xl:w-[900px] container text-[#646464] h-max">
                         <AddTask manageTaskList={manageTaskList} />
                         <Controls manageTaskList={manageTaskList} />
                         <TaskList taskList={taskList} manageTaskList={manageTaskList} />
