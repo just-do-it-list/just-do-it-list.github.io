@@ -1,6 +1,3 @@
-import { taskAction } from "@/hooks/useNewTask";
-import { useEffect } from "react";
-
 type inputProps = {
     value?: string;
     placeholder?: string;

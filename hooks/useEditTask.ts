@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import {gql, useMutation} from "@apollo/client";
 import { taskType } from "@/components/Task";
-import { useState, useRef } from "react";
 
 const editTaskMutation = gql`
     mutation EditTask($editedTask: EditTaskInput!) {

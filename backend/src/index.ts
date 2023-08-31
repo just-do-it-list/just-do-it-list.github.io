@@ -11,6 +11,7 @@ type changeStatusInput = {
 
 const resolvers = {
     Query: {
+        // Return all tasks
         tasks() {
             return db.tasks;
         }
@@ -18,6 +19,7 @@ const resolvers = {
     Mutation: {
         addTask(_: any, {newTask}: {newTask:Task}) {
             try {
+                // Add new task and update file
                 db.tasks.push(newTask);
                 flushToFile(db);
                 return "Added new task";
@@ -28,6 +30,7 @@ const resolvers = {
         },
         deleteTask(_: any, {timeCreated}: {timeCreated: number}) {
             try {
+                // Delete task using timeCreated as identifier
                 db.tasks = db.tasks.filter(task => task.timeCreated !== timeCreated);
                 flushToFile(db);
                 return `Deleted task with creation time ${timeCreated}`;
@@ -38,6 +41,7 @@ const resolvers = {
         },
         editTask(_: any, {editedTask}: {editedTask: Task}) {
             try {
+                // Edit task using timeCreated as identifier
                 db.tasks = db.tasks.map((task: Task) => task.timeCreated === editedTask.timeCreated ? {...task, ...editedTask} : task);
                 flushToFile(db);
                 return `Edited task with creation time ${editedTask.timeCreated}`;
@@ -48,6 +52,7 @@ const resolvers = {
         },
         changeStatus(_: any, {statusChange}: {statusChange: changeStatusInput}) {
             try {
+                // Change task status using timeCreated as identifier
                 db.tasks = db.tasks.map((task: Task) =>
                     task.timeCreated === statusChange.timeCreated
                     ?
@@ -68,6 +73,7 @@ const resolvers = {
         },
         deleteCompletedTasks() {
             try {
+                // Filter tasks using status property
                 db.tasks = db.tasks.filter((task: Task) => task.status !== 'COMPLETED');
                 flushToFile(db);
                 return `Deleted all completed tasks`;
@@ -78,8 +84,10 @@ const resolvers = {
         },
         toggleAllComplete() {
             try {
+                // If all tasks are completed, change all the tasks to pending
                 if(db.tasks.length === db.tasks.filter(task => task.status === "COMPLETED").length)
                     db.tasks = db.tasks.map((task: Task) => ({...task, status: "PENDING"}));
+                // Else, mark all tasks as completed
                 else
                     db.tasks = db.tasks.map((task: Task) => ({...task, status: "COMPLETED"}));
                 flushToFile(db);

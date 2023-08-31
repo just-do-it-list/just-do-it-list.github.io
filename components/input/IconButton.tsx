@@ -11,15 +11,6 @@ type iconButtonProps = {
     onEventDispatch: any;
 }
 
-const buttonTypeDispatch = (type: buttonType, dispatch: any) => {
-    switch(type) {
-        case "ADD":
-            return dispatch({type: 'CLICK'});
-        default:
-            return dispatch();
-    }
-}
-
 const IconButton = ({Icon, disabled = false, active = false, hide = true, buttonType, onEventDispatch}: iconButtonProps) => {
     return (
         <div className="w-9 md:w-12">
@@ -31,7 +22,7 @@ const IconButton = ({Icon, disabled = false, active = false, hide = true, button
                         ${active && 'text-[#007AFF]'}
                         ${hide && 'icon-button'}
                     `}
-                    onClick={() => buttonTypeDispatch(buttonType, onEventDispatch)}
+                    onClick={() => buttonType === 'ADD' ? onEventDispatch({type: 'CLICK'}) : onEventDispatch()}
                 />
             </button>
         </div>

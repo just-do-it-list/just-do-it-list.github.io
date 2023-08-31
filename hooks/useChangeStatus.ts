@@ -1,14 +1,6 @@
-import { taskType } from "@/components/Task";
 import { useEffect, useRef, useState } from "react";
-import {gql, useMutation} from "@apollo/client";
-
-`
-PENDING -> COMPLETED
-PENDING -> PINNED
-PINNED -> PENDING
-PINNED -> COMPLETED
-COMPLETED -> PENDING
-`
+import { gql, useMutation } from "@apollo/client";
+import { taskType } from "@/components/Task";
 
 type changeStatusProps = {
     task: taskType;

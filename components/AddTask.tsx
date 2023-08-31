@@ -1,5 +1,5 @@
-import Input from "./Input";
-import IconButton from "./IconButton";
+import Input from "./input/Input";
+import IconButton from "./input/IconButton";
 import {FaPlus} from "react-icons/fa6";
 import { useNewTask } from "@/hooks/useNewTask";
 

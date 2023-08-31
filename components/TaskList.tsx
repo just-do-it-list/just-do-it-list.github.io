@@ -1,8 +1,8 @@
+import { useContext, useEffect} from 'react';
+import { useTransition, animated } from '@react-spring/web'
 import Task, {taskType} from './Task';
 import { useFetchList } from '@/hooks/useFetchList';
 import { FilterContext, AllCompleteContext } from './TodoContainer';
-import { useContext, useEffect} from 'react';
-import { useTransition, animated } from '@react-spring/web'
 
 const TaskList = ({taskList, manageTaskList}: {taskList: taskType[], manageTaskList: any}) => {
     const {error, loading} = useFetchList(manageTaskList);
@@ -11,9 +11,8 @@ const TaskList = ({taskList, manageTaskList}: {taskList: taskType[], manageTaskL
     const allCompleteContext = useContext(AllCompleteContext);
     const setAllComplete = allCompleteContext?.setAllComplete || (() => '');
 
-    let height = 0;
     const transitions = useTransition(
-        taskList.map(data => ({ ...data, y: (height += 0) - 0 })),
+        taskList.map(data => ({ ...data, y: 0 })),
         {
             key: (item: taskType) => item.timeCreated,
             from: { height: 0, opacity: 0 },
@@ -32,22 +31,15 @@ const TaskList = ({taskList, manageTaskList}: {taskList: taskType[], manageTaskL
     }, [taskList])
 
     if(loading)
-        return (<div>Loading...</div>);
+        return (
+            <div>Loading...</div>
+        );
     if(error)
-        return (<div>Error Occured while fetching from database<br/>{error.toString()}</div>)
-    // return (
-    //     <>
-    //         {
-    //             (activeTab === 'all'
-    //             ? taskList
-    //             : taskList.filter(task => task.status.toLowerCase() === activeTab)
-    //             )
-    //             .map(task =>
-    //                 <Task task={task} key={task.timeCreated} manageTaskList={manageTaskList}/>
-    //             )
-    //         }
-    //     </>
-    // );
+        return (
+            <div>
+                Error Occured while fetching from database<br/>{error.toString()}
+            </div>
+        );
 
     return (
         <>

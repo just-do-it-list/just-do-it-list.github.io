@@ -1,12 +1,12 @@
-import Input from "./Input";
-import Checkbox from "./Checkbox";
-import IconButton from './IconButton';
+import { useEffect } from "react";
 import { FaThumbtack } from 'react-icons/fa6';
 import { FaXmark } from 'react-icons/fa6';
+import Input from "./input/Input";
+import Checkbox from "./input/Checkbox";
+import IconButton from './input/IconButton';
 import { useDeleteTask } from "@/hooks/useDeleteTask";
 import { useEditTask } from "@/hooks/useEditTask";
 import { useChangeStatus } from "@/hooks/useChangeStatus";
-import { useEffect } from "react";
 
 export type taskType = {
     timeCreated: number;

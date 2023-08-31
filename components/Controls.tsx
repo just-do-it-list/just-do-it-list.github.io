@@ -1,11 +1,11 @@
-import Checkbox from "./Checkbox";
-import ToggleGroup from "./ToggleGroup";
-import IconButton from "./IconButton";
+import { useContext } from "react";
 import { FaTrashCan } from "react-icons/fa6"
+import Checkbox from "./input/Checkbox";
+import ToggleGroup from "./input/ToggleGroup";
+import IconButton from "./input/IconButton";
 import { useDeleteCompletedTasks } from "@/hooks/useDeleteCompletedTasks";
 import { useToggleAllComplete } from "@/hooks/useToggleAllComplete";
 import { AllCompleteContext } from "./TodoContainer";
-import { useContext } from "react";
 
 const Controls = ({manageTaskList}: any) => {
     const {setDeleteCompleted} = useDeleteCompletedTasks(manageTaskList);

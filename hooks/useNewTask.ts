@@ -25,10 +25,8 @@ const reducer = (state: taskState, action: taskAction) => {
         case 'ENTER':
         case 'CLICK':
             return state.value.length ? {...state, changeTask: true} : state;
-        case 'RESET_VALUE':
-            return {...state, value: initialState.value};
-        case 'RESET_FLAG':
-                return {...state, changeTask: false};
+        case 'RESET':
+            return initialState;
         default:
             return state;
     }
@@ -51,8 +49,7 @@ const useNewTask = (manageTaskList: any) => {
                 task: state.value,
                 status: "PENDING"
             }
-            dispatch({type: 'RESET_FLAG'});
-            dispatch({type: 'RESET_VALUE'});
+            dispatch({type: 'RESET'});
             createTask({
                 variables: {
                     newTask

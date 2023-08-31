@@ -1,11 +1,11 @@
 'use client';
-import Controls from "./Controls";
-import TaskList from "./TaskList";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apollo";
+import Controls from "./Controls";
+import TaskList from "./TaskList";
 import AddTask from "./AddTask";
 import { useTaskList } from "@/hooks/useTaskList";
-import { Dispatch, SetStateAction, createContext, useState } from "react";
 
 type filterContextType = {
     activeTab: string;
