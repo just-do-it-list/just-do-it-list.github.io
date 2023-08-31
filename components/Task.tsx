@@ -6,6 +6,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { useDeleteTask } from "@/hooks/useDeleteTask";
 import { useEditTask } from "@/hooks/useEditTask";
 import { useChangeStatus } from "@/hooks/useChangeStatus";
+import { useEffect } from "react";
 
 export type taskType = {
     timeCreated: number;
@@ -20,6 +21,12 @@ const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => 
     const isPinned = task.status === "PINNED";
     const isComplete = task.status === "COMPLETED";
 
+    useEffect(() => {
+        if(taskValue === '')
+            setTimeCreated(task.timeCreated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [taskValue])
+
     return (
         <>
             <Checkbox
@@ -30,7 +37,6 @@ const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => 
             <Input
                 value={taskValue}
                 onEventDispatch={setTaskValue}
-                onDeleteDispatch={() => setTimeCreated(task.timeCreated)}
                 completed={isComplete}
                 pinned={isPinned}
             />

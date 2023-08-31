@@ -15,7 +15,7 @@ const useEditTask = ({manageTaskList, task}: {manageTaskList: any, task: taskTyp
     const firstRender = useRef(true);
 
     const setTaskValue = (e: any) => {
-        if(e.payload)
+        if(typeof e.payload === 'string')
             setTask(e.payload)
     }
 

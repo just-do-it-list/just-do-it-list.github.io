@@ -23,7 +23,6 @@ const AddTask = ({manageTaskList}: addTaskProps) => {
                 placeholder="Add your next task..."
                 value={state.value}
                 onEventDispatch={dispatch}
-                onDeleteDispatch={() => {}}
             />
         </div>
     )
