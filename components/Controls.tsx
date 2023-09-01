@@ -7,9 +7,9 @@ import { useDeleteCompletedTasks } from "@/hooks/useDeleteCompletedTasks";
 import { useToggleAllComplete } from "@/hooks/useToggleAllComplete";
 import { AllCompleteContext } from "./TodoContainer";
 
-const Controls = ({manageTaskList}: any) => {
-    const {setDeleteCompleted} = useDeleteCompletedTasks(manageTaskList);
-    const {setToggleAll} = useToggleAllComplete(manageTaskList);
+const Controls = () => {
+    const {setDeleteCompleted} = useDeleteCompletedTasks();
+    const {setToggleAll} = useToggleAllComplete();
     const allCompleteContext = useContext(AllCompleteContext);
     const allComplete = allCompleteContext?.allComplete || false;
 

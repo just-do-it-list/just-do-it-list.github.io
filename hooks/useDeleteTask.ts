@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import {gql, useMutation} from "@apollo/client";
+import { useEffect, useState, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { TaskListContext } from "@/components/TodoContainer";
 
 const newTaskMutation = gql`
     mutation DeleteTask($timeCreated: Float!) {
@@ -7,7 +8,8 @@ const newTaskMutation = gql`
     }
 `;
 
-const useDeleteTask = (manageTaskList: any) => {
+const useDeleteTask = () => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [timeCreated, setTimeCreated] = useState(-1);
     const [deleteTask] = useMutation(newTaskMutation);
 

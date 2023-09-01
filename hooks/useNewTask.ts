@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import {gql, useMutation} from "@apollo/client";
-import { taskType } from "@/components/Task";
-import {useReducer} from 'react';
+import { useEffect, useReducer, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { TaskListContext } from "@/components/TodoContainer";
 
 export type taskState = {
     value: string;
@@ -38,7 +37,8 @@ const newTaskMutation = gql`
     }
 `;
 
-const useNewTask = (manageTaskList: any) => {
+const useNewTask = () => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [state, dispatch] = useReducer(reducer, initialState);
     const [createTask] = useMutation(newTaskMutation)
 
@@ -47,7 +47,7 @@ const useNewTask = (manageTaskList: any) => {
             const newTask = {
                 timeCreated: Date.now(),
                 task: state.value,
-                status: "PENDING"
+                status: "PENDING" as 'PENDING'
             }
             dispatch({type: 'RESET'});
             createTask({

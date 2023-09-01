@@ -1,11 +1,11 @@
 import { useContext, useEffect} from 'react';
 import { useTransition, animated } from '@react-spring/web'
-import Task, {taskType} from './Task';
+import Task, { taskType } from './Task';
 import { useFetchList } from '@/hooks/useFetchList';
 import { FilterContext, AllCompleteContext } from './TodoContainer';
 
-const TaskList = ({taskList, manageTaskList}: {taskList: taskType[], manageTaskList: any}) => {
-    const {error, loading} = useFetchList(manageTaskList);
+const TaskList = ({taskList}: {taskList: taskType[]}) => {
+    const {error, loading} = useFetchList();
     const filterContext = useContext(FilterContext);
     const activeTab = filterContext?.activeTab.toLowerCase() || 'all';
     const allCompleteContext = useContext(AllCompleteContext);
@@ -47,7 +47,7 @@ const TaskList = ({taskList, manageTaskList}: {taskList: taskType[], manageTaskL
                 (activeTab === 'all' || task.status.toLowerCase() === activeTab)
                 ?
                     <animated.div style={{ zIndex: taskList.length - index, overflow: 'hidden', padding: 0, margin: 0, ...style}}>
-                        <Task task={task} key={task.timeCreated} manageTaskList={manageTaskList}/>
+                        <Task task={task} key={task.timeCreated}/>
                     </animated.div>
                 :
                     <></>

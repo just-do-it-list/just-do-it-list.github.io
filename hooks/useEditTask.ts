@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef } from "react";
-import {gql, useMutation} from "@apollo/client";
+import { useEffect, useState, useRef, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
 import { taskType } from "@/components/Task";
+import { TaskListContext } from "@/components/TodoContainer";
 
 const editTaskMutation = gql`
     mutation EditTask($editedTask: EditTaskInput!) {
@@ -8,14 +9,15 @@ const editTaskMutation = gql`
     }
 `;
 
-const useEditTask = ({manageTaskList, task}: {manageTaskList: any, task: taskType}) => {
+const useEditTask = (task: taskType) => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [taskValue, setTask] = useState(task.task);
     const [editTask] = useMutation(editTaskMutation);
     const firstRender = useRef(true);
 
-    const setTaskValue = (e: any) => {
-        if(typeof e.payload === 'string')
-            setTask(e.payload)
+    const setTaskValue = ({payload}: {payload: string}) => {
+        if(payload !== undefined && payload !== null)
+            setTask(payload)
     }
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const useEditTask = ({manageTaskList, task}: {manageTaskList: any, task: taskTyp
         }
         const editedTask = {
             timeCreated: task.timeCreated,
-            task: taskValue
+            task: taskValue,
         }
         editTask({
             variables: {
@@ -34,7 +36,12 @@ const useEditTask = ({manageTaskList, task}: {manageTaskList: any, task: taskTyp
         });
         manageTaskList({
             type: "EDIT",
-            payload: {task: editedTask}
+            payload: {
+                task: {
+                    ...editedTask,
+                    status: task.status
+                }
+            }
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [taskValue])

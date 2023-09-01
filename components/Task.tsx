@@ -14,10 +14,10 @@ export type taskType = {
     status: "PINNED" | "PENDING" | "COMPLETED";
 }
 
-const Task = ({task, manageTaskList}: {task: taskType, manageTaskList: any}) => {
-    const {setTimeCreated} = useDeleteTask(manageTaskList);
-    const {taskValue, setTaskValue} = useEditTask({task, manageTaskList});
-    const {dispatchChangedStatus} = useChangeStatus({task, manageTaskList});
+const Task = ({task}: {task: taskType}) => {
+    const {setTimeCreated} = useDeleteTask();
+    const {taskValue, setTaskValue} = useEditTask(task);
+    const {dispatchChangedStatus} = useChangeStatus(task);
     const isPinned = task.status === "PINNED";
     const isComplete = task.status === "COMPLETED";
 

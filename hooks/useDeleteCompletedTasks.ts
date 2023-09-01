@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import {gql, useMutation} from "@apollo/client";
+import { useEffect, useState, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { TaskListContext } from "@/components/TodoContainer";
 
 const newTaskMutation = gql`
     mutation DeleteCompletedTasks($deleteCompleted: Boolean) {
@@ -7,7 +8,8 @@ const newTaskMutation = gql`
     }
 `;
 
-const useDeleteCompletedTasks = (manageTaskList: any) => {
+const useDeleteCompletedTasks = () => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [deleteCompleted, setDeleteCompleted] = useState(false)
     const [deleteCompletedTasks] = useMutation(newTaskMutation);
 

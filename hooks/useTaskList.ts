@@ -1,7 +1,7 @@
-import { taskType } from "@/components/Task";
 import { useReducer } from "react";
+import { taskType } from "@/components/Task";
 
-type manageListAction = {
+export type manageListAction = {
     type: string;
     payload: {
         data?: taskType[];

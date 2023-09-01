@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import {gql, useMutation} from "@apollo/client";
+import { useEffect, useState, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { TaskListContext } from "@/components/TodoContainer";
 
 const newTaskMutation = gql`
     mutation ToggleAllComplete($toggleAll: Boolean) {
@@ -7,7 +8,8 @@ const newTaskMutation = gql`
     }
 `;
 
-const useToggleAllComplete = (manageTaskList: any) => {
+const useToggleAllComplete = () => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [toggleAll, setToggleAll] = useState(false)
     const [toggleAllTasks] = useMutation(newTaskMutation);
 

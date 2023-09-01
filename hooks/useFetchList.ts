@@ -1,5 +1,6 @@
-import {gql, useQuery} from '@apollo/client';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import { TaskListContext } from '@/components/TodoContainer';
 
 const allTasksQuery = gql`
     query {
@@ -11,7 +12,8 @@ const allTasksQuery = gql`
     }
 `;
 
-const useFetchList = (manageTaskList: any) => {
+const useFetchList = () => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const {data, error, loading} = useQuery(allTasksQuery);
 
     useEffect(() => {

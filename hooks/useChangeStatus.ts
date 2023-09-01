@@ -1,11 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { taskType } from "@/components/Task";
-
-type changeStatusProps = {
-    task: taskType;
-    manageTaskList: any;
-}
+import { TaskListContext } from "@/components/TodoContainer";
 
 const taskStatusMutation = gql`
     mutation ChangeTaskStatus($statusChange: ChangeStatusInput!) {
@@ -13,7 +9,8 @@ const taskStatusMutation = gql`
     }
 `
 
-const useChangeStatus = ({task, manageTaskList}: changeStatusProps) => {
+const useChangeStatus = (task: taskType) => {
+    const manageTaskList = useContext(TaskListContext) || (() => {});
     const [taskStatus, dispatchChangedStatus] = useState('');
     const firstRender = useRef(false)
     const [changeTaskStatus] = useMutation(taskStatusMutation);
@@ -37,7 +34,7 @@ const useChangeStatus = ({task, manageTaskList}: changeStatusProps) => {
             type: 'CHANGE_STATUS',
             payload: {
                 task,
-                newStatus: taskStatus,
+                newStatus: taskStatus as "PINNED" | "PENDING" | "COMPLETED",
                 newTimeCreated: statusChange.newTimeCreated
             }
         })

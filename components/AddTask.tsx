@@ -1,14 +1,10 @@
 import Input from "./input/Input";
 import IconButton from "./input/IconButton";
-import {FaPlus} from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { useNewTask } from "@/hooks/useNewTask";
 
-type addTaskProps = {
-    manageTaskList: any;
-}
-
-const AddTask = ({manageTaskList}: addTaskProps) => {
-    const {state, dispatch} = useNewTask(manageTaskList);
+const AddTask = () => {
+    const {state, dispatch} = useNewTask();
 
     return (
         <div>
